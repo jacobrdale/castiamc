@@ -18,8 +18,6 @@ import java.util.stream.Stream;
 
 import net.minecraft.client.Minecraft;
 
-import com.castiamc.client.altmanager.AltManager;
-import com.castiamc.client.altmanager.Encryption;
 import com.castiamc.client.analytics.PlausibleAnalytics;
 import com.castiamc.client.clickgui.ClickGui;
 import com.castiamc.client.command.CmdList;
@@ -42,7 +40,7 @@ import com.castiamc.client.other_feature.OtfList;
 import com.castiamc.client.other_feature.OtherFeature;
 import com.castiamc.client.settings.SettingsFile;
 import com.castiamc.client.update.ProblematicResourcePackDetector;
-import com.castiamc.client.update.WurstUpdater; // updater can stay
+import com.castiamc.client.update.CCUpdater; // updater can stay
 import com.castiamc.client.util.json.JsonException;
 
 public enum CastiaClient
