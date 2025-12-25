@@ -1,32 +1,41 @@
-package com.castiamc.client.hud;
+package com.castiamc.client;
 
+import com.castiamc.client.events.GUIRenderListener;
 import com.castiamc.client.hack.Hack;
 import com.castiamc.client.hack.HackList;
-import com.castiamc.client.CastiaClient;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
-public class IngameHUD {
+public class IngameHUD implements GUIRenderListener {
 
     private final Minecraft mc;
-    private final HackList hackList;
-    private final int x = 2; // distance from left edge
-    private final int lineHeight = 10; // space between hack names
 
     public IngameHUD() {
-        mc = Minecraft.getInstance();
-        hackList = CastiaClient.INSTANCE.getHax();
+        this.mc = CastiaClient.MC;
     }
 
-    public void render() {
-        int y = 0; // start at top of the screen
+    @Override
+    public void onRender() {
+        renderHackList();
+    }
 
-        for (Hack hack : hackList.getAllHacks()) {
+    private void renderHackList() {
+        HackList hacks = CastiaClient.INSTANCE.getHax();
+        int x = 2; // left side of screen
+        int y = 0; // start at top
+        int lineHeight = 10;
+
+        for (Hack hack : hacks.getHacks()) {
             if (hack.isEnabled()) {
-                // Green text for enabled hacks
-                mc.fontRenderer.drawStringWithShadow(hack.getName(), x, y, 0x00FF00);
+                drawText(hack.getName(), x, y);
                 y += lineHeight;
             }
         }
+    }
+
+    // Basic text rendering using Minecraft's built-in font renderer
+    private void drawText(String text, int x, int y) {
+        mc.font.drawShadow(mc.gui, Component.literal(text), x, y, 0xFFFFFF);
     }
 }

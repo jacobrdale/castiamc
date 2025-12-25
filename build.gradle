@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.castiamc'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenCentral()
+    // Optional: Add Minecraft-specific Maven repository if available
+    // maven { url 'https://libraries.minecraft.net/' }
+}
+
+dependencies {
+    // Compile-only Minecraft dependency (replace with actual jar if needed)
+    compileOnly files('libs/minecraft-client-1.21.8.jar')
+
+    // Optional: other compile-time dependencies
+    // compileOnly 'some.group:some-artifact:version'
+}
+
+// Ensure Gradle compiles with Java 17
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+// Jar task (Castia Client jar)
+jar {
+    manifest {
+        attributes(
+            'Implementation-Title': 'Castia Client',
+            'Implementation-Version': version,
+            'Main-Class': 'com.castiamc.client.CastiaClient'
+        )
+    }
+
+    // Exclude Minecraft classes from the jar
+    exclude '**/net/minecraft/**'
+}
+
+// Optional: build a fat jar (not recommended for this mod)
+task fatJar(type: Jar) {
+    archiveClassifier.set('all')
+    from sourceSets.main.output
+
+    // Do not include compile-only deps
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes 'Main-Class': 'com.castiamc.client.CastiaClient'
+    }
+}
